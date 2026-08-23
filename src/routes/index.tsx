@@ -64,7 +64,7 @@ const readFile = (file: File) =>
       reader.onload = () => resolve({ text: String(reader.result) });
       reader.readAsText(file);
     } else {
-      reader.onload = () => resolve({ dataBase64: String(reader.result).split(",")[1] });
+      reader.onload = () => resolve({ dataBase64: String(reader.result).split(",")[1] ?? "" });
       reader.readAsDataURL(file);
     }
   });
