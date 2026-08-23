@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      jobs: {
+        Row: {
+          certifications: string[]
+          company: string
+          created_at: string
+          description: string
+          education: string
+          embedding: Json | null
+          id: string
+          location: string
+          min_years: number
+          preferred_skills: string[]
+          required_skills: string[]
+          salary: string
+          title: string
+        }
+        Insert: {
+          certifications?: string[]
+          company: string
+          created_at?: string
+          description: string
+          education?: string
+          embedding?: Json | null
+          id?: string
+          location: string
+          min_years?: number
+          preferred_skills?: string[]
+          required_skills?: string[]
+          salary: string
+          title: string
+        }
+        Update: {
+          certifications?: string[]
+          company?: string
+          created_at?: string
+          description?: string
+          education?: string
+          embedding?: Json | null
+          id?: string
+          location?: string
+          min_years?: number
+          preferred_skills?: string[]
+          required_skills?: string[]
+          salary?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      resume_analyses: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          profile: Json
+          results: Json
+          resume_hash: string
+          resume_name: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          profile: Json
+          results: Json
+          resume_hash: string
+          resume_name: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          profile?: Json
+          results?: Json
+          resume_hash?: string
+          resume_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
