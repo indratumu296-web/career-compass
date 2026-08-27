@@ -62,12 +62,12 @@ async def main() -> int:
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
 
-        await page.goto(BASE_URL, wait_until="domcontentloaded")
+        await page.goto(BASE_URL, wait_until="networkidle")
         # unique device id => no cross-run cache reuse
         await page.evaluate(
             "id => localStorage.setItem('smarthire-device-id', id)", str(uuid.uuid4())
         )
-        await page.reload(wait_until="domcontentloaded")
+        await page.reload(wait_until="networkidle")
 
         results = []
         for resume in RESUMES:
