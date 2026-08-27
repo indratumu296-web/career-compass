@@ -36,12 +36,17 @@ async def read_matches(page):
 
 
 async def analyze(page, resume: Path):
-    await page.set_input_files("input[type=file]", str(resume))
-    # wait for the analysis to finish (upload label stops showing the spinner)
+    # the real input is visually hidden, so go through the "Choose file" button
+    async with page.expect_file_chooser() as chooser:
+        await page.locator("button.primary-button").first.click()
+    await (await chooser.value).set_files(str(resume))
+    # wait for the analysis to finish (the spinner disappears)
+    await page.wait_for_selector("main .animate-spin", timeout=15_000)
     await page.wait_for_function(
         "() => !document.querySelector('main .animate-spin')",
         timeout=ANALYSIS_TIMEOUT_MS,
     )
+
     matches = await read_matches(page)
     await page.screenshot(path=str(SCREENSHOTS / f"{resume.stem}.png"))
     return matches
