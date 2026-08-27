@@ -9,6 +9,23 @@ const inputSchema = z.object({
   dataBase64: z.string().max(8000000).optional(),
 });
 
+const csv = (value: string) =>
+  value.split(",").map((s) => s.trim()).filter(Boolean);
+
+const jobSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().min(2).max(120),
+  company: z.string().min(2).max(120),
+  location: z.string().min(2).max(120),
+  salary: z.string().min(1).max(60),
+  description: z.string().min(20).max(20000),
+  requiredSkills: z.string().max(2000),
+  preferredSkills: z.string().max(2000).default(""),
+  minYears: z.number().min(0).max(50),
+  education: z.string().max(200).default(""),
+  certifications: z.string().max(2000).default(""),
+});
+
 export const analyzeResume = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => inputSchema.parse(data))
   .handler(async ({ data }) => {
