@@ -31,6 +31,7 @@ export type JobRow = {
   education: string;
   certifications: string[];
   embedding: number[] | null;
+  updated_at?: string;
 };
 
 export type JobMatch = {
