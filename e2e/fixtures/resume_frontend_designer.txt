@@ -1,0 +1,28 @@
+Marco Ellis — Frontend Engineer & UI Designer
+Email: marco.ellis@example.com
+
+SUMMARY
+Frontend engineer with 3 years building accessible React interfaces and design systems.
+No backend, data pipeline, or cloud infrastructure experience.
+
+SKILLS
+HTML, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS, Figma, Storybook,
+accessibility (WCAG), animation, user research, responsive design, Jest, Cypress.
+
+EXPERIENCE
+Frontend Engineer, Bloom Studio (2023 - present)
+- Built a component library used across six marketing sites.
+- Improved Lighthouse accessibility scores from 71 to 98.
+
+Junior UI Developer, Lumen Agency (2022 - 2023)
+- Converted Figma designs into responsive React pages.
+
+EDUCATION
+B.A. Graphic Design, Leeds Arts University, 2022
+
+PROJECTS
+- Open-source Tailwind theme generator.
+- Portfolio site with motion-driven storytelling.
+
+CERTIFICATIONS
+Google UX Design Certificate

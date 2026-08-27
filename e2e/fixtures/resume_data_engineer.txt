@@ -1,0 +1,32 @@
+Priya Sharma — Senior Data Engineer
+Email: priya.sharma@example.com
+
+SUMMARY
+Data engineer with 8 years building large-scale batch and streaming pipelines on AWS.
+
+SKILLS
+Python, SQL, Apache Spark, Airflow, Kafka, dbt, Snowflake, AWS (S3, Glue, EMR, Redshift),
+Docker, Kubernetes, Terraform, data modeling, data warehousing, ETL, CI/CD.
+
+EXPERIENCE
+Senior Data Engineer, NorthBridge Analytics (2019 - present)
+- Built Spark + Airflow pipelines processing 4 TB/day into Snowflake.
+- Migrated legacy ETL to dbt, cutting warehouse cost 38%.
+- Designed Kafka streaming ingestion with exactly-once semantics.
+
+Data Engineer, Vertex Retail (2018 - 2019)
+- Built Redshift dimensional models and Glue ingestion jobs.
+
+EDUCATION
+M.S. Computer Science, University of Pune, 2018
+B.E. Information Technology, 2016
+
+PROJECTS
+- Lakehouse migration to Iceberg with automated data quality checks.
+- Real-time clickstream pipeline (Kafka -> Spark Structured Streaming -> Snowflake).
+- Airflow operator library open-sourced internally.
+
+CERTIFICATIONS
+AWS Certified Data Analytics - Specialty
+Databricks Certified Data Engineer Professional
+SnowPro Core Certification
