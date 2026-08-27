@@ -9,6 +9,23 @@ const inputSchema = z.object({
   dataBase64: z.string().max(8000000).optional(),
 });
 
+const csv = (value: string) =>
+  value.split(",").map((s) => s.trim()).filter(Boolean);
+
+const jobSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().min(2).max(120),
+  company: z.string().min(2).max(120),
+  location: z.string().min(2).max(120),
+  salary: z.string().min(1).max(60),
+  description: z.string().min(20).max(20000),
+  requiredSkills: z.string().max(2000),
+  preferredSkills: z.string().max(2000).default(""),
+  minYears: z.number().min(0).max(50),
+  education: z.string().max(200).default(""),
+  certifications: z.string().max(2000).default(""),
+});
+
 export const analyzeResume = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => inputSchema.parse(data))
   .handler(async ({ data }) => {
@@ -151,4 +168,60 @@ export const getAnalysisHistory = createServerFn({ method: "POST" })
         topJob: results.length ? results[0]!.title : "—",
       };
     });
+  });
+
+export const listJobs = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("jobs")
+    .select("id,title,company,location,salary,description,required_skills,preferred_skills,min_years,education,certifications,created_at")
+    .order("created_at", { ascending: true });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((job) => ({
+    id: job.id as string,
+    title: job.title as string,
+    company: job.company as string,
+    location: job.location as string,
+    salary: job.salary as string,
+    description: job.description as string,
+    requiredSkills: (job.required_skills ?? []) as string[],
+    preferredSkills: (job.preferred_skills ?? []) as string[],
+    minYears: Number(job.min_years ?? 0),
+    education: (job.education ?? "") as string,
+    certifications: (job.certifications ?? []) as string[],
+  }));
+});
+
+export const saveJob = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => jobSchema.parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const row = {
+      title: data.title,
+      company: data.company,
+      location: data.location,
+      salary: data.salary,
+      description: data.description,
+      required_skills: csv(data.requiredSkills),
+      preferred_skills: csv(data.preferredSkills),
+      min_years: data.minYears,
+      education: data.education,
+      certifications: csv(data.certifications),
+      embedding: null, // force re-embedding on next analysis
+    };
+    const query = data.id
+      ? supabaseAdmin.from("jobs").update(row).eq("id", data.id).select("id").single()
+      : supabaseAdmin.from("jobs").insert(row).select("id").single();
+    const { data: saved, error } = await query;
+    if (error) throw new Error(error.message);
+    return { id: saved.id as string };
+  });
+
+export const deleteJob = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("jobs").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

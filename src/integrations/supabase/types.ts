@@ -29,6 +29,7 @@ export type Database = {
           required_skills: string[]
           salary: string
           title: string
+          updated_at: string
         }
         Insert: {
           certifications?: string[]
@@ -44,6 +45,7 @@ export type Database = {
           required_skills?: string[]
           salary: string
           title: string
+          updated_at?: string
         }
         Update: {
           certifications?: string[]
@@ -59,6 +61,7 @@ export type Database = {
           required_skills?: string[]
           salary?: string
           title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -67,6 +70,7 @@ export type Database = {
           created_at: string
           device_id: string
           id: string
+          jobs_sig: string | null
           profile: Json
           results: Json
           resume_hash: string
@@ -76,6 +80,7 @@ export type Database = {
           created_at?: string
           device_id: string
           id?: string
+          jobs_sig?: string | null
           profile: Json
           results: Json
           resume_hash: string
@@ -85,6 +90,7 @@ export type Database = {
           created_at?: string
           device_id?: string
           id?: string
+          jobs_sig?: string | null
           profile?: Json
           results?: Json
           resume_hash?: string
