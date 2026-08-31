@@ -34,6 +34,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
       extractProfile,
       embed,
       loadJobs,
+      jobsSignature,
       cacheJobEmbedding,
       jobText,
       resumeText,
@@ -46,11 +47,16 @@ export const analyzeResume = createServerFn({ method: "POST" })
     if (!payload) throw new Error("No resume content was provided.");
     const hash = await sha256(payload);
 
+    const jobs = await loadJobs();
+    if (!jobs.length) throw new Error("No jobs are available in the database.");
+    const jobsSig = await jobsSignature(jobs);
+
     const { data: cached } = await supabaseAdmin
       .from("resume_analyses")
       .select("profile,results,created_at")
       .eq("device_id", data.deviceId)
       .eq("resume_hash", hash)
+      .eq("jobs_sig", jobsSig)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -70,9 +76,6 @@ export const analyzeResume = createServerFn({ method: "POST" })
         : { kind: "file" as const, fileName: data.fileName, mimeType: data.mimeType, dataBase64: data.dataBase64! },
     );
 
-    const jobs = await loadJobs();
-    if (!jobs.length) throw new Error("No jobs are available in the database.");
-
     const missing = jobs.filter((job) => !Array.isArray(job.embedding));
     if (missing.length) {
       const vectors = await embed(missing.map(jobText));
@@ -83,6 +86,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
         }),
       );
     }
+
 
     const [resumeVector] = await embed([resumeText(profile)]);
 
