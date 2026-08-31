@@ -139,6 +139,7 @@ function SmartHire() {
             <div className="hidden gap-6 text-sm font-medium md:flex">
               <a href="#dashboard" className="text-foreground">Dashboard</a>
               <a href="#matches" className="text-muted-foreground transition-colors hover:text-foreground">Job matches</a>
+              <a href="#jobs" className="text-muted-foreground transition-colors hover:text-foreground">Manage jobs</a>
               <a href="#history" className="text-muted-foreground transition-colors hover:text-foreground">History</a>
             </div>
           </div>
