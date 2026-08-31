@@ -18,6 +18,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { analyzeResume, getAnalysisHistory } from "@/lib/smarthire.functions";
+import { JobManager } from "@/components/JobManager";
 
 export const Route = createFileRoute("/")({
   head: () => ({
