@@ -144,6 +144,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
       resume_hash: hash,
       profile: profile as never,
       results: matches as never,
+      jobs_sig: jobsSig,
     });
 
     return { cached: false, analyzedAt, profile, matches };
