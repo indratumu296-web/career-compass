@@ -302,11 +302,14 @@ function SmartHire() {
             ))}
           </div>
 
+          <JobManager onJobsChanged={() => { if (file) mutation.mutate(file); }} />
+
           <div className="flex gap-2 rounded-lg border border-border bg-muted p-4 text-xs leading-relaxed text-muted-foreground">
             <Info className="size-4 shrink-0 text-primary" />
             <p>
               Scores are explainable recommendations, not hiring decisions. Resume parsing and semantic similarity run
-              server-side; the weighted formula is deterministic and auditable per job.
+              server-side; the weighted formula is deterministic and auditable per job. Editing the job database
+              automatically re-scores the current resume.
             </p>
           </div>
         </div>
