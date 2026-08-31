@@ -18,6 +18,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { analyzeResume, getAnalysisHistory } from "@/lib/smarthire.functions";
+import { JobManager } from "@/components/JobManager";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -138,6 +139,7 @@ function SmartHire() {
             <div className="hidden gap-6 text-sm font-medium md:flex">
               <a href="#dashboard" className="text-foreground">Dashboard</a>
               <a href="#matches" className="text-muted-foreground transition-colors hover:text-foreground">Job matches</a>
+              <a href="#jobs" className="text-muted-foreground transition-colors hover:text-foreground">Manage jobs</a>
               <a href="#history" className="text-muted-foreground transition-colors hover:text-foreground">History</a>
             </div>
           </div>
@@ -300,11 +302,14 @@ function SmartHire() {
             ))}
           </div>
 
+          <JobManager onJobsChanged={() => { if (file) mutation.mutate(file); }} />
+
           <div className="flex gap-2 rounded-lg border border-border bg-muted p-4 text-xs leading-relaxed text-muted-foreground">
             <Info className="size-4 shrink-0 text-primary" />
             <p>
               Scores are explainable recommendations, not hiring decisions. Resume parsing and semantic similarity run
-              server-side; the weighted formula is deterministic and auditable per job.
+              server-side; the weighted formula is deterministic and auditable per job. Editing the job database
+              automatically re-scores the current resume.
             </p>
           </div>
         </div>

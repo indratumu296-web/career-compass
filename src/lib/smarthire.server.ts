@@ -378,9 +378,18 @@ export async function generateInsights(
 export async function loadJobs(): Promise<JobRow[]> {
   const { data, error } = await supabaseAdmin
     .from("jobs")
-    .select("id,title,company,location,salary,description,required_skills,preferred_skills,min_years,education,certifications,embedding");
+    .select("id,title,company,location,salary,description,required_skills,preferred_skills,min_years,education,certifications,embedding,updated_at");
   if (error) throw new Error(error.message);
   return (data ?? []) as unknown as JobRow[];
+}
+
+/** Fingerprint of the live job set, so edited/added/removed jobs invalidate cached analyses. */
+export async function jobsSignature(jobs: JobRow[]) {
+  const raw = jobs
+    .map((j) => `${j.id}:${j.updated_at ?? ""}`)
+    .sort()
+    .join("|");
+  return sha256(raw);
 }
 
 export async function cacheJobEmbedding(id: string, embedding: number[]) {
