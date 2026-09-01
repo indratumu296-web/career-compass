@@ -450,3 +450,106 @@ export async function jobsSignature(jobs: JobRow[]) {
 export async function cacheJobEmbedding(id: string, embedding: number[]) {
   await supabaseAdmin.from("jobs").update({ embedding: embedding as never }).eq("id", id);
 }
+
+/* ------------------------------------------------------------------ */
+/* Resume quality + ATS compatibility (deterministic, rule-based)      */
+/* ------------------------------------------------------------------ */
+
+export type Suggestion = { title: string; detail: string; severity: "high" | "medium" | "low" };
+
+export type ResumeAudit = {
+  qualityScore: number;
+  atsScore: number;
+  employabilityScore: number;
+  qualityFactors: { label: string; score: number; max: number; note: string }[];
+  atsFactors: { label: string; score: number; max: number; note: string }[];
+  suggestions: Suggestion[];
+};
+
+const DEFAULT_SIGNALS: ResumeSignals = {
+  hasSummarySection: false,
+  hasSkillsSection: true,
+  hasExperienceSection: true,
+  hasProjectsSection: false,
+  hasCertificationsSection: false,
+  hasEducationSection: true,
+  hasEmail: false,
+  hasPhone: false,
+  hasLinks: false,
+  usesStandardHeadings: true,
+  measurableAchievements: 0,
+  strongActionVerbs: 0,
+  approxWordCount: 500,
+  riskyFormatting: false,
+};
+
+export function auditResume(profile: ResumeProfile, topMatches: JobMatch[]): ResumeAudit {
+  const s = { ...DEFAULT_SIGNALS, ...(profile.signals ?? {}) };
+  const suggestions: Suggestion[] = [];
+
+  const cap = (v: number, max: number) => Math.max(0, Math.min(max, Math.round(v)));
+
+  const skillScore = cap((Math.min(profile.skills.length, 15) / 15) * 20, 20);
+  const projectScore = cap(Math.min(profile.projects.length, 3) * 5, 15);
+  const achievementScore = cap(Math.min(s.measurableAchievements, 6) * 2.5, 15);
+  const verbScore = cap(Math.min(s.strongActionVerbs, 8) * 1.5, 12);
+  const summaryScore = s.hasSummarySection ? 10 : 0;
+  const certScore = profile.certifications.length ? 8 : 0;
+  const eduScore = s.hasEducationSection ? 8 : 0;
+  const lengthScore =
+    s.approxWordCount >= 350 && s.approxWordCount <= 900 ? 12 : s.approxWordCount < 350 ? 5 : 6;
+
+  const qualityFactors = [
+    { label: "Technical skill coverage", score: skillScore, max: 20, note: `${profile.skills.length} skills detected` },
+    { label: "Projects", score: projectScore, max: 15, note: `${profile.projects.length} projects listed` },
+    { label: "Measurable achievements", score: achievementScore, max: 15, note: `${s.measurableAchievements} quantified bullets` },
+    { label: "Strong action verbs", score: verbScore, max: 12, note: `${s.strongActionVerbs} bullets with strong verbs` },
+    { label: "Professional summary", score: summaryScore, max: 10, note: s.hasSummarySection ? "Present" : "Missing" },
+    { label: "Certifications", score: certScore, max: 8, note: `${profile.certifications.length} certifications` },
+    { label: "Education section", score: eduScore, max: 8, note: s.hasEducationSection ? "Present" : "Missing" },
+    { label: "Length", score: lengthScore, max: 12, note: `~${s.approxWordCount} words` },
+  ];
+  const qualityScore = Math.round(qualityFactors.reduce((a, f) => a + f.score, 0));
+
+  const best = topMatches[0];
+  const jobKeywords = best ? [...best.matchingSkills, ...best.missingSkills] : [];
+  const keywordCoverage = jobKeywords.length ? best!.matchingSkills.length / jobKeywords.length : 0.5;
+
+  const atsFactors = [
+    { label: "Job keyword coverage", score: cap(keywordCoverage * 30, 30), max: 30, note: best ? `${best.matchingSkills.length}/${jobKeywords.length} keywords for ${best.title}` : "Upload jobs to measure" },
+    { label: "Required sections", score: cap(([s.hasSummarySection, s.hasSkillsSection, s.hasExperienceSection, s.hasEducationSection, s.hasProjectsSection].filter(Boolean).length / 5) * 20, 20), max: 20, note: "Summary, skills, experience, education, projects" },
+    { label: "Standard headings", score: s.usesStandardHeadings ? 10 : 3, max: 10, note: s.usesStandardHeadings ? "ATS-readable headings" : "Non-standard headings detected" },
+    { label: "Contact information", score: (s.hasEmail ? 6 : 0) + (s.hasPhone ? 4 : 0) + (s.hasLinks ? 5 : 0), max: 15, note: [s.hasEmail && "email", s.hasPhone && "phone", s.hasLinks && "links"].filter(Boolean).join(", ") || "No contact details found" },
+    { label: "Skill density", score: cap((Math.min(profile.skills.length, 12) / 12) * 15, 15), max: 15, note: `${profile.skills.length} parsable skills` },
+    { label: "Parsable formatting", score: s.riskyFormatting ? 2 : 10, max: 10, note: s.riskyFormatting ? "Tables/columns/graphics may break parsing" : "Clean single-column layout" },
+  ];
+  const atsScore = Math.round(atsFactors.reduce((a, f) => a + f.score, 0));
+
+  const avgTop = topMatches.length
+    ? topMatches.slice(0, 5).reduce((a, j) => a + j.score, 0) / Math.min(5, topMatches.length)
+    : 0;
+  const employabilityScore = Math.round(avgTop * 0.5 + qualityScore * 0.3 + atsScore * 0.2);
+
+  if (!s.hasSummarySection)
+    suggestions.push({ title: "Add a professional summary", detail: `Open with 2-3 lines positioning you as a ${profile.predictedCategory}, naming your top three skills and years of experience.`, severity: "high" });
+  if (s.measurableAchievements < 3)
+    suggestions.push({ title: "Add measurable results", detail: "Quantify at least three bullets — volumes processed, latency reduced, revenue influenced, or percentage improvements.", severity: "high" });
+  if (profile.projects.length < 2)
+    suggestions.push({ title: "Include two relevant projects", detail: "Recruiters and ATS both reward a projects section; describe the stack, your role and the outcome.", severity: "high" });
+  if (profile.skills.length < 10)
+    suggestions.push({ title: "Expand the skills section", detail: "List tools, languages and platforms explicitly — keyword matching is literal in most ATS systems.", severity: "medium" });
+  if (!profile.certifications.length)
+    suggestions.push({ title: "Add certifications", detail: "Even one recognised certification improves the certification component of every match score.", severity: "medium" });
+  if (s.strongActionVerbs < 5)
+    suggestions.push({ title: "Strengthen your action verbs", detail: "Replace 'responsible for' and 'worked on' with Built, Designed, Automated, Migrated, Reduced.", severity: "medium" });
+  if (best && best.missingSkills.length)
+    suggestions.push({ title: `Close the keyword gap for ${best.title}`, detail: `Add these where you genuinely have experience: ${best.missingSkills.slice(0, 5).join(", ")}.`, severity: "high" });
+  if (s.riskyFormatting)
+    suggestions.push({ title: "Simplify the layout", detail: "Remove tables, columns, text boxes and icons; use a single-column layout with standard headings.", severity: "medium" });
+  if (s.approxWordCount > 900)
+    suggestions.push({ title: "Trim the resume", detail: `~${s.approxWordCount} words is long. Cut older roles to one line each and target 500-800 words.`, severity: "low" });
+  if (!s.hasEmail || !s.hasPhone)
+    suggestions.push({ title: "Add complete contact details", detail: "Include a professional email, a phone number and a LinkedIn or portfolio link in the header.", severity: "low" });
+
+  return { qualityScore, atsScore, employabilityScore, qualityFactors, atsFactors, suggestions };
+}
