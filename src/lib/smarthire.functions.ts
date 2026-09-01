@@ -40,6 +40,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
       resumeText,
       scoreJob,
       generateInsights,
+      auditResume,
     } = await import("./smarthire.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -62,11 +63,14 @@ export const analyzeResume = createServerFn({ method: "POST" })
       .maybeSingle();
 
     if (cached) {
+      const profile = cached.profile as never as import("./smarthire.server").ResumeProfile;
+      const matches = cached.results as never as import("./smarthire.server").JobMatch[];
       return {
         cached: true,
         analyzedAt: cached.created_at as string,
-        profile: cached.profile as never,
-        matches: cached.results as never,
+        profile,
+        matches: matches as never,
+        audit: auditResume(profile, matches),
       };
     }
 
@@ -112,6 +116,11 @@ export const analyzeResume = createServerFn({ method: "POST" })
         location: job.location,
         salary: job.salary,
         description: job.description,
+        requiredSkills: job.required_skills ?? [],
+        preferredSkills: job.preferred_skills ?? [],
+        minYears: Number(job.min_years ?? 0),
+        educationRequirement: job.education ?? "",
+        certificationRequirements: job.certifications ?? [],
         similarity: Math.round(similarity * 100) / 100,
         ...result,
       };
@@ -147,7 +156,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
       jobs_sig: jobsSig,
     });
 
-    return { cached: false, analyzedAt, profile, matches };
+    return { cached: false, analyzedAt, profile, matches, audit: auditResume(profile, matches as never) };
   });
 
 export const getAnalysisHistory = createServerFn({ method: "POST" })
