@@ -4,6 +4,23 @@ const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 const CHAT_MODEL = "google/gemini-3.7-flash";
 const EMBED_MODEL = "openai/text-embedding-3-small";
 
+export type ResumeSignals = {
+  hasSummarySection: boolean;
+  hasSkillsSection: boolean;
+  hasExperienceSection: boolean;
+  hasProjectsSection: boolean;
+  hasCertificationsSection: boolean;
+  hasEducationSection: boolean;
+  hasEmail: boolean;
+  hasPhone: boolean;
+  hasLinks: boolean;
+  usesStandardHeadings: boolean;
+  measurableAchievements: number;
+  strongActionVerbs: number;
+  approxWordCount: number;
+  riskyFormatting: boolean;
+};
+
 export type ResumeProfile = {
   candidateName: string;
   predictedCategory: string;
@@ -16,6 +33,7 @@ export type ResumeProfile = {
   certifications: string[];
   keywords: string[];
   summary: string;
+  signals?: ResumeSignals;
 };
 
 export type JobRow = {
