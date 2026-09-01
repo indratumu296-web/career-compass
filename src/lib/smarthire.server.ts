@@ -220,7 +220,7 @@ export async function extractProfile(content:
       {
         role: "system",
         content:
-          "You are a resume parser. Extract facts only from the document; never invent skills, certifications or experience. totalYearsExperience is the total professional years (use 0 for students). categoryConfidence is 0-100. keywords should list 20-40 distinctive domain terms found in the resume.",
+          "You are a resume parser. Extract facts only from the document; never invent skills, certifications or experience. totalYearsExperience is the total professional years (use 0 for students). categoryConfidence is 0-100. keywords should list 20-40 distinctive domain terms found in the resume. signals must describe the document itself: which sections exist, whether contact details and links are present, whether headings are standard ATS headings, how many bullet points contain measurable results (numbers, %, currency), how many bullets start with a strong action verb, the approximate word count, and riskyFormatting=true when tables, columns, images or unusual symbols would confuse an ATS parser.",
       },
       { role: "user", content: userContent },
     ],
