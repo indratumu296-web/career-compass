@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as UploadRouteImport } from './routes/upload'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalysisRoute = AnalysisRouteImport.update({
   id: '/analysis',
   path: '/analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JobsRoute = JobsRouteImport.update({
@@ -38,12 +44,14 @@ const UploadRoute = UploadRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
   '/jobs': typeof JobsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
   '/jobs': typeof JobsRoute
   '/upload': typeof UploadRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
   '/jobs': typeof JobsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/jobs' | '/upload'
+  fullPaths: '/' | '/analysis' | '/compare' | '/jobs' | '/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/jobs' | '/upload'
-  id: '__root__' | '/' | '/analysis' | '/jobs' | '/upload'
+  to: '/' | '/analysis' | '/compare' | '/jobs' | '/upload'
+  id: '__root__' | '/' | '/analysis' | '/compare' | '/jobs' | '/upload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
+  CompareRoute: typeof CompareRoute
   JobsRoute: typeof JobsRoute
   UploadRoute: typeof UploadRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/analysis'
       fullPath: '/analysis'
       preLoaderRoute: typeof AnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jobs': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
+  CompareRoute: CompareRoute,
   JobsRoute: JobsRoute,
   UploadRoute: UploadRoute,
 }
