@@ -11,6 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as OptimizerRouteImport } from './routes/optimizer'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as SkillsRouteImport } from './routes/skills'
 import { Route as UploadRouteImport } from './routes/upload'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +29,36 @@ const AnalysisRoute = AnalysisRouteImport.update({
   path: '/analysis',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OptimizerRoute = OptimizerRouteImport.update({
+  id: '/optimizer',
+  path: '/optimizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsRoute = SkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
   path: '/upload',
@@ -32,30 +68,82 @@ const UploadRoute = UploadRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
+  '/jobs': typeof JobsRoute
+  '/optimizer': typeof OptimizerRoute
+  '/projects': typeof ProjectsRoute
+  '/roadmap': typeof RoadmapRoute
+  '/skills': typeof SkillsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
+  '/jobs': typeof JobsRoute
+  '/optimizer': typeof OptimizerRoute
+  '/projects': typeof ProjectsRoute
+  '/roadmap': typeof RoadmapRoute
+  '/skills': typeof SkillsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/compare': typeof CompareRoute
+  '/jobs': typeof JobsRoute
+  '/optimizer': typeof OptimizerRoute
+  '/projects': typeof ProjectsRoute
+  '/roadmap': typeof RoadmapRoute
+  '/skills': typeof SkillsRoute
   '/upload': typeof UploadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/upload'
+  fullPaths:
+    | '/'
+    | '/analysis'
+    | '/compare'
+    | '/jobs'
+    | '/optimizer'
+    | '/projects'
+    | '/roadmap'
+    | '/skills'
+    | '/upload'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/upload'
-  id: '__root__' | '/' | '/analysis' | '/upload'
+  to:
+    | '/'
+    | '/analysis'
+    | '/compare'
+    | '/jobs'
+    | '/optimizer'
+    | '/projects'
+    | '/roadmap'
+    | '/skills'
+    | '/upload'
+  id:
+    | '__root__'
+    | '/'
+    | '/analysis'
+    | '/compare'
+    | '/jobs'
+    | '/optimizer'
+    | '/projects'
+    | '/roadmap'
+    | '/skills'
+    | '/upload'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
+  CompareRoute: typeof CompareRoute
+  JobsRoute: typeof JobsRoute
+  OptimizerRoute: typeof OptimizerRoute
+  ProjectsRoute: typeof ProjectsRoute
+  RoadmapRoute: typeof RoadmapRoute
+  SkillsRoute: typeof SkillsRoute
   UploadRoute: typeof UploadRoute
 }
 
@@ -75,6 +163,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalysisRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/optimizer': {
+      id: '/optimizer'
+      path: '/optimizer'
+      fullPath: '/optimizer'
+      preLoaderRoute: typeof OptimizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills': {
+      id: '/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof SkillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/upload': {
       id: '/upload'
       path: '/upload'
@@ -88,6 +218,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
+  CompareRoute: CompareRoute,
+  JobsRoute: JobsRoute,
+  OptimizerRoute: OptimizerRoute,
+  ProjectsRoute: ProjectsRoute,
+  RoadmapRoute: RoadmapRoute,
+  SkillsRoute: SkillsRoute,
   UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport
