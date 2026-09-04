@@ -50,7 +50,7 @@ function AnalysisPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Overall match score" value={`${best?.score ?? 0}%`} progress={best?.score ?? 0} hint={best ? `Best: ${best.title}` : undefined} />
+        <MetricCard label="Overall match score" value={`${best?.score ?? 0}%`} progress={best?.score ?? 0} hint={best ? `Best: ${best.title}` : ""} />
         <MetricCard label="Resume quality score" value={`${audit.qualityScore}%`} progress={audit.qualityScore} tone="success" hint="Structure, achievements, depth" />
         <MetricCard label="ATS compatibility" value={`${audit.atsScore}/100`} progress={audit.atsScore} tone="warning" hint="Keyword & parsing readiness" />
         <MetricCard label="Employability index" value={`${audit.employabilityScore}%`} progress={audit.employabilityScore} hint="Match 50% · quality 30% · ATS 20%" />
@@ -60,7 +60,7 @@ function AnalysisPage() {
         <MetricCard label="Recommended jobs" value={matches.length} hint={`${matches.filter((m) => m.score >= 60).length} above 60% match`} />
         <MetricCard label="Skills detected" value={profile.skills.length} hint={`${profile.projects.length} projects · ${profile.certifications.length} certifications`} />
         <MetricCard label="Missing skills" value={missing.length} tone="destructive" hint={`${priority.length} high priority`} />
-        <MetricCard label="Recommended path" value={paths[0]?.role ?? "—"} hint={paths[0] ? `${paths[0].match}% average match` : undefined} />
+        <MetricCard label="Recommended path" value={paths[0]?.role ?? "—"} hint={paths[0] ? `${paths[0].match}% average match` : ""} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
