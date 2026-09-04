@@ -50,8 +50,8 @@ function SkillsPage() {
                 <PolarGrid stroke="var(--border)" />
                 <PolarAngleAxis dataKey="skill" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
                 <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
-                <Radar name="Demand" dataKey="importance" stroke="var(--warning)" fill="var(--warning)" fillOpacity={0.15} />
-                <Radar name="Coverage" dataKey="coverage" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} />
+                <Radar name="Demand" dataKey="Market" stroke="var(--warning)" fill="var(--warning)" fillOpacity={0.15} />
+                <Radar name="Coverage" dataKey="You" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} />
               </RadarChart>
             </ResponsiveContainer>
           </div>

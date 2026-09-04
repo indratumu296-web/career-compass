@@ -154,7 +154,7 @@ export function skillInsights(profile: ResumeProfile, matches: JobMatch[]): Skil
       coverage = 0;
     }
     const priority: SkillInsight["priority"] =
-      group === "missing" && importance >= 50 ? "High" : group === "missing" || importance >= 60 ? "Medium" : "Low";
+      group === "missing" && (importance >= 25 || count >= 3) ? "High" : group === "missing" || importance >= 40 ? "Medium" : "Low";
     return { skill, group, importance, coverage, priority, demand: Math.round(count) };
   });
 
