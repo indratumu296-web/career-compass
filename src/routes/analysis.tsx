@@ -65,9 +65,9 @@ function AnalysisPage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card title="Predicted job category" subtitle="Classified from the parsed resume content.">
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
             <ScoreRing value={profile.categoryConfidence} label="confidence" />
-            <div>
+            <div className="min-w-0">
               <p className="text-xl font-bold">{profile.predictedCategory}</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{profile.summary}</p>
             </div>
