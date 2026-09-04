@@ -162,7 +162,24 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     letter-spacing: 0;
+    position: relative;
+    min-height: 100vh;
   }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 12% 8%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%),
+      radial-gradient(50rem 36rem at 88% 12%, color-mix(in oklab, var(--signal) 16%, transparent), transparent 62%),
+      radial-gradient(55rem 40rem at 50% 100%, color-mix(in oklab, var(--success) 14%, transparent), transparent 62%);
+    background-size: 200% 200%;
+    animation: aurora-drift 26s ease-in-out infinite alternate;
+  }
+
 }
 
 html { scroll-behavior: smooth; }
