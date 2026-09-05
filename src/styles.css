@@ -185,6 +185,10 @@
     position: fixed;
     inset: -50%;
     z-index: 50;
+    pointer-events: none;
+    display: block;
+    color: var(--foreground);
+    opacity: 0.055;
     font-size: 3.5rem;
     font-weight: 800;
     line-height: 3.2;
