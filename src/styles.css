@@ -180,6 +180,22 @@
     animation: aurora-drift 26s ease-in-out infinite alternate;
   }
 
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='240'%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='26' font-weight='700' fill='%23000' text-anchor='middle' transform='rotate(-18 210 120)'%3Eindra reddy tumu%3C/text%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+  .dark body::after {
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='240'%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='26' font-weight='700' fill='%23fff' text-anchor='middle' transform='rotate(-18 210 120)'%3Eindra reddy tumu%3C/text%3E%3C/svg%3E");
+  }
+
 }
 
 html { scroll-behavior: smooth; }
