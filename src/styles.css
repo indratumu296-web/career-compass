@@ -180,6 +180,25 @@
     animation: aurora-drift 26s ease-in-out infinite alternate;
   }
 
+  body::after {
+    content: "indra reddy tumu · indra reddy tumu · indra reddy tumu · indra reddy tumu · indra reddy tumu · indra reddy tumu · indra reddy tumu · indra reddy tumu";
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    pointer-events: none;
+    display: block;
+    color: var(--foreground);
+    opacity: 0.045;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 3.2;
+    word-spacing: 2rem;
+    white-space: pre-wrap;
+    transform: rotate(-18deg);
+    user-select: none;
+  }
+  .dark body::after { opacity: 0.06; }
+
 }
 
 html { scroll-behavior: smooth; }
