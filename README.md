@@ -1,302 +1,820 @@
-# Career Compass
+# 🎯 Career Compass — SmartHire
 
-[# SmartHire — Resume-to-Job Matching & Career Guidance Engine
+### Resume-to-Job Matching & Career Guidance Engine
 
-Classical-ML project (no LLMs). Upload a resume → get matching jobs, a predicted
+**Career Compass (SmartHire)** is a classical Machine Learning–based career guidance platform that analyzes a user's resume, predicts their most suitable career category, recommends relevant job opportunities, and identifies the skills they need to improve.
 
-role category, and a skill-gap report.
+> **No LLMs are used.** The project focuses on traditional Machine Learning and Natural Language Processing techniques such as **TF-IDF, Logistic Regression, Cosine Similarity, and K-Means clustering**.
 
-## Core scope
+---
 
-1. Resume category classifier — supervised (TF-IDF → Logistic Regression)
+## 🌟 Project Overview
 
-2. Job recommender — unsupervised (TF-IDF + cosine similarity, top-N)
+Finding the right job can be difficult when a resume does not clearly match the requirements of available positions.
 
-3. Skill-gap report — job skills minus resume skills
+**Career Compass** addresses this problem through an end-to-end ML pipeline:
 
-Optional: fit predictor, clustering + topics, salary regression.
-
-## Requirements
-
-- **Python 3.10+** (developed on 3.12)
-
-- **git** (to clone)
-
-- A free **Kaggle account** (to download the datasets)
-
-## Getting started
-
-### 1. Clone the repo
-
+```text
+Resume Upload
+      ↓
+Resume Text Extraction
+      ↓
+Text Preprocessing
+      ↓
+Resume Category Prediction
+      ↓
+Job Recommendation
+      ↓
+Skill-Gap Analysis
+      ↓
+Career Guidance
 ```
 
-git clone <REPO_URL> SmartHire
+The system converts unstructured resume and job-description text into useful career insights.
 
-cd SmartHire
+---
 
+## 🚀 Key Features
+
+### 📄 1. Resume Analysis
+
+Upload a resume in supported formats and extract its textual information for analysis.
+
+**Supported formats:**
+
+* PDF
+* DOCX
+* TXT
+
+The extracted content is cleaned and transformed into machine-readable text.
+
+---
+
+### 🤖 2. Resume Category Classification
+
+The system predicts the most relevant career or job category from the uploaded resume.
+
+**Machine Learning approach:**
+
+```text
+Resume Text
+     ↓
+Text Cleaning
+     ↓
+TF-IDF Vectorization
+     ↓
+Logistic Regression
+     ↓
+Predicted Career Category
 ```
 
-> Replace `<REPO_URL>` with the repository's clone URL (e.g.
+**Algorithm:** Logistic Regression
+**Feature Extraction:** TF-IDF
 
-> `https://github.com/<user>/SmartHire.git`). If you already have the folder
+---
 
-> locally, just `cd` into it.
+### 💼 3. Job Recommendation System
 
-### 2. Create a virtual environment and install dependencies
+Career Compass recommends the most relevant jobs by comparing the user's resume with available job descriptions.
 
+The system uses:
+
+* TF-IDF Vectorization
+* Cosine Similarity
+* Top-N ranking
+
+Example:
+
+```text
+Resume
+   ↓
+TF-IDF Vector
+   ↓
+Compare with Job Vectors
+   ↓
+Cosine Similarity
+   ↓
+Rank Jobs
+   ↓
+Top-N Recommendations
 ```
 
-python -m venv .venv
+---
 
-# Windows (PowerShell)
+### 🧩 4. Skill-Gap Analysis
 
-.venv\Scripts\Activate.ps1
+The platform identifies missing skills by comparing:
 
-# Windows (cmd)
-
-.venv\Scripts\activate.bat
-
-# macOS / Linux
-
-source .venv/bin/activate
-
-pip install -r requirements.txt
-
+```text
+Required Job Skills
+        −
+Resume Skills
+        =
+Skill Gap
 ```
 
-### 3. Download the datasets
+For example:
 
-The datasets are **not** committed (see `.gitignore`) — download them into
+**Job Requirements**
 
-`data/raw/` once:
-
+```text
+Python
+SQL
+Machine Learning
+Power BI
+Git
 ```
 
-python download_data.py
+**Resume Skills**
 
+```text
+Python
+SQL
+Git
 ```
 
-The first run asks for your Kaggle credentials (username + API key from
+**Identified Skill Gap**
 
-Kaggle → Settings → **API** → **Create New Token**). This fetches the Resume
-
-and Naukri datasets; LinkedIn is optional.
-
-Filenames are already wired up in `src/config.py`, so you only edit that file if
-
-your downloaded filenames differ. **Full download details + manual alternatives:**
-
-see [`data/DATASETS.md`](data/DATASETS.md).
-
-### 4. Build the cleaned data / job corpus
-
-Merge and clean the raw files into model-ready CSVs (`data/processed/`):
-
+```text
+Machine Learning
+Power BI
 ```
 
-python -m src.data.preprocess
+This helps users understand what they should learn to become stronger candidates.
 
+---
+
+### 📊 5. Career Insights
+
+The platform can provide useful information such as:
+
+* Predicted career category
+* Job-match percentage
+* Recommended job roles
+* Matching skills
+* Missing skills
+* Career improvement areas
+
+---
+
+## 🧠 Machine Learning Approach
+
+Career Compass primarily uses classical ML techniques.
+
+| Component                      | Technique           | Purpose                                 |
+| ------------------------------ | ------------------- | --------------------------------------- |
+| Resume Classification          | Logistic Regression | Predict resume/job category             |
+| Text Features                  | TF-IDF              | Convert text into numerical vectors     |
+| Job Recommendation             | Cosine Similarity   | Rank relevant jobs                      |
+| Clustering                     | K-Means             | Discover groups of similar jobs/resumes |
+| Skill Analysis                 | Skill Overlap       | Identify missing skills                 |
+| Fit Prediction *(Optional)*    | Supervised ML       | Estimate candidate-job fit              |
+| Salary Prediction *(Optional)* | Regression          | Estimate salary ranges                  |
+| Topic Modeling *(Optional)*    | NLP                 | Discover common job topics              |
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                    ┌──────────────────┐
+                    │   Resume Upload  │
+                    └────────┬─────────┘
+                             ↓
+                    ┌──────────────────┐
+                    │  Resume Parser   │
+                    │ PDF/DOCX/TXT     │
+                    └────────┬─────────┘
+                             ↓
+                    ┌──────────────────┐
+                    │ Text Preprocessing│
+                    └────────┬─────────┘
+                             ↓
+              ┌──────────────┴──────────────┐
+              ↓                             ↓
+   ┌────────────────────┐        ┌────────────────────┐
+   │ Resume Classifier  │        │ Job Recommender    │
+   │ TF-IDF + Logistic  │        │ TF-IDF + Cosine     │
+   │ Regression         │        │ Similarity          │
+   └─────────┬──────────┘        └─────────┬──────────┘
+             ↓                             ↓
+   ┌────────────────────┐        ┌────────────────────┐
+   │ Career Category    │        │ Top-N Job Matches  │
+   └─────────┬──────────┘        └─────────┬──────────┘
+             └──────────────┬──────────────┘
+                            ↓
+                   ┌───────────────────┐
+                   │ Skill-Gap Analysis│
+                   └─────────┬─────────┘
+                             ↓
+                   ┌───────────────────┐
+                   │ Career Guidance   │
+                   └───────────────────┘
 ```
 
-This writes `data/interim/job_corpus.csv`, `data/processed/jobs_clean.csv`, and
+---
 
-`data/processed/resumes_clean.csv`. Run all commands from the project root so the
+# 📁 Project Structure
 
-`src` package imports resolve.
-
-### 5. Explore & train (notebooks in VS Code)
-
-The notebooks run in **VS Code** (install the **Python** and **Jupyter**
-
-extensions if prompted) — no standalone Jupyter server needed:
-
-1. Open the `SmartHire` folder in VS Code.
-
-2. Open a notebook, e.g. `notebooks/01_eda.ipynb`.
-
-3. Top-right, click **Select Kernel → Python Environments** and choose the venv
-
-   at `.venv\Scripts\python.exe` (shown as `.venv (Python 3.12)`).
-
-4. Run cells with **Shift+Enter**.
-
-Run the notebooks in order **01 → 05**. Each notebook is one module of the
-
-project; move reusable code from a notebook into the matching `src/` file, and
-
-save trained models to `models/` (as `.pkl` via joblib) so the app can load them
-
-without retraining.
-
-> Prefer the classic browser UI instead? Add `jupyter` to `requirements.txt`
-
-> (or `pip install jupyter`) and run `jupyter notebook`. The pinned dependency
-
-> is `ipykernel`, which is all VS Code needs.
-
-### 6. Launch the web app
-
-```
-
-streamlit run app/streamlit_app.py
-
-```
-
-Opens the SmartHire portal in your browser (default <http://localhost:8501>).
-
-> **Current status:** the data pipeline (steps 3–4) is fully working. The model
-
-> code in `src/models/` (`classifier.py`, `recommender.py`) and the Streamlit UI
-
-> in `app/streamlit_app.py` are still stubs — build them via the notebooks first
-
-> (step 5). Until then the app page will be empty.
-
-## Project structure
-
-```
-
-smarthire/
-
-├── README.md                         # what the project is, setup, how to run
-
-├── requirements.txt                  # Python dependencies to install
-
-├── .gitignore                        # keeps datasets, models, caches out of git
-
+```text
+SmartHire/
 │
-
-├── data/                             # all data lives here (git-ignored)
-
-│   ├── raw/                          # original Kaggle downloads — NEVER edit these
-
-│   ├── interim/                      # merged / partially cleaned data
-
-│   └── processed/                    # final, model-ready data
-
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── download_data.py
 │
-
-├── notebooks/                        # exploration & experiments — run in order
-
-│   ├── 01_eda.ipynb                  # explore resumes + jobs (shape, categories, nulls)
-
-│   ├── 02_resume_classifier.ipynb    # SUPERVISED: predict resume category
-
-│   ├── 03_recommender.ipynb          # UNSUPERVISED: cosine-similarity job ranking
-
-│   ├── 04_clustering_topics.ipynb    # UNSUPERVISED: clusters + skill-gap report
-
-│   └── 05_fit_predictor.ipynb        # SUPERVISED (optional): shortlisting model
-
+├── data/
+│   ├── raw/
+│   │   ├── resume_data.csv
+│   │   ├── naukri_data.csv
+│   │   └── linkedin_data.csv
+│   │
+│   ├── interim/
+│   │   └── job_corpus.csv
+│   │
+│   └── processed/
+│       ├── jobs_clean.csv
+│       └── resumes_clean.csv
 │
-
-├── src/                              # reusable code — imported by notebooks + app
-
-│   ├── config.py                     # paths, dataset filenames, constants
-
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02_resume_classifier.ipynb
+│   ├── 03_recommender.ipynb
+│   ├── 04_clustering_topics.ipynb
+│   └── 05_fit_predictor.ipynb
+│
+├── src/
+│   ├── config.py
+│   │
 │   ├── data/
-
-│   │   ├── load_data.py              # read the raw CSVs
-
-│   │   └── preprocess.py             # clean text, merge the job corpus
-
+│   │   ├── load_data.py
+│   │   └── preprocess.py
+│   │
 │   ├── features/
-
-│   │   ├── text_features.py          # TF-IDF vectorizers
-
-│   │   └── match_features.py         # skill overlap, experience/education match
-
+│   │   ├── text_features.py
+│   │   └── match_features.py
+│   │
 │   ├── models/
-
-│   │   ├── classifier.py             # train/predict resume category
-
-│   │   ├── recommender.py            # cosine-similarity job ranking (top-N)
-
-│   │   ├── clustering.py             # KMeans + optional topic modeling
-
-│   │   └── fit_predictor.py          # shortlisting model (optional)
-
+│   │   ├── classifier.py
+│   │   ├── recommender.py
+│   │   ├── clustering.py
+│   │   └── fit_predictor.py
+│   │
 │   ├── parsing/
-
-│   │   └── resume_parser.py          # extract text from PDF / DOCX / TXT
-
-│   └── evaluate.py                   # shared metrics for all models
-
+│   │   └── resume_parser.py
+│   │
+│   └── evaluate.py
 │
-
-├── models/                           # saved .pkl model files (git-ignored)
-
+├── models/
+│   ├── classifier.pkl
+│   ├── tfidf_vectorizer.pkl
+│   └── recommender.pkl
 │
-
 ├── app/
-
-│   └── streamlit_app.py              # the web portal UI (build this last)
-
+│   └── streamlit_app.py
 │
-
 ├── reports/
-
-│   └── figures/                      # confusion matrix, PCA/t-SNE, silhouette plots
-
+│   └── figures/
 │
-
 └── tests/
-
-    └── test_features.py              # basic unit tests (optional)
-
+    └── test_features.py
 ```
 
-### What each part is for
+---
 
-- **`data/`** — Keep raw downloads in `raw/` untouched; write cleaned versions to
+# ⚙️ Technology Stack
 
-  `interim/` then `processed/`. The whole folder is git-ignored so datasets never
+### Programming Language
 
-  get committed.
+* Python 3.10+
+* Developed and tested with Python 3.12
 
-- **`notebooks/`** — Where you experiment and see results. Run 01 → 05 in order;
+### Machine Learning
 
-  each notebook is one module of the project.
+* Scikit-learn
+* Logistic Regression
+* K-Means
+* Cosine Similarity
 
-- **`src/`** — Once code works in a notebook, move the reusable function here so the
+### Natural Language Processing
 
-  notebooks and the app can both import it. `config.py` holds every path so nothing
+* TF-IDF
+* Text preprocessing
+* Regular expressions
+* Keyword/skill extraction
 
-  is hard-coded.
+### Data Processing
 
-- **`models/`** — Trained models saved as `.pkl` (via joblib) so the app can load
+* Pandas
+* NumPy
 
-  them without retraining.
+### Data Visualization
 
-- **`app/`** — The Streamlit portal. It only wires together pieces that already work
+* Matplotlib
+* Plotly
 
-  in `src/`, so build it last.
+### Web Application
 
-- **`reports/`** — Figures for the write-up and the final report.
+* Streamlit
 
-- **`tests/`** — Optional sanity checks for feature functions.
+### Development Tools
 
-](https://github.com/Anjali05R/Smart_hire_AI_ML_June.git)
+* Git
+* GitHub
+* VS Code
+* Jupyter Notebook
 
-IN THE ABOVE INSTRUCTION FOLLOW CREATE A WEBSITE RICH AND MORE PROFISSONAL CLEALRY
+---
 
-This project was built with [Lovable](https://lovable.dev).
+# 📦 Requirements
 
-## Build with Lovable
+Before starting the project, make sure you have:
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6b8e9966-3995-4781-b5c4-164629de6d33).
+* **Python 3.10 or higher**
+* **Git**
+* **Kaggle account**
+* **VS Code** *(recommended)*
+* Internet connection for downloading datasets
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+---
 
-## Development
+# 🛠️ Installation & Setup
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## 1. Clone the Repository
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+Clone the project from GitHub:
+
+```bash
+git clone <https://github.com/indratumu296-web/career-compass.git>
+cd SmartHire
+```
+
+
+## 2. Create a Virtual Environment
+
+### Windows
+
+```bash
+python -m venv .venv
+```
+
+Activate it using PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Or Command Prompt:
+
+```cmd
+.venv\Scripts\activate.bat
+```
+
+### macOS / Linux
+
+```bash
+source .venv/bin/activate
+```
+
+---
+
+## 3. Install Dependencies
+
+Install all required Python packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# 📊 Dataset Setup
+
+The datasets are **not included in the GitHub repository** because they are stored in the project's `.gitignore`.
+
+Download the required datasets using:
+
+```bash
+python download_data.py
+```
+
+The first execution may ask for your Kaggle credentials.
+
+### Kaggle API Setup
+
+1. Log in to Kaggle.
+2. Open **Settings**.
+3. Find the **API** section.
+4. Create a new API token.
+5. Configure your Kaggle credentials.
+6. Run:
+
+```bash
+python download_data.py
+```
+
+The script downloads the required Resume and Naukri datasets.
+
+LinkedIn data can be included as an optional dataset.
+
+---
+
+# 🧹 Data Preprocessing
+
+After downloading the datasets, run:
+
+```bash
+python -m src.data.preprocess
+```
+
+This process:
+
+* Loads raw datasets
+* Handles missing values
+* Cleans text
+* Removes unnecessary characters
+* Normalizes textual information
+* Combines job datasets
+* Creates model-ready datasets
+
+Generated files include:
+
+```text
+data/interim/job_corpus.csv
+
+data/processed/jobs_clean.csv
+
+data/processed/resumes_clean.csv
+```
+
+> Run commands from the project root so that the `src` package imports work correctly.
+
+---
+
+# 📓 Running the Notebooks
+
+The project uses notebooks for exploration, experimentation, model development, and evaluation.
+
+Open the project in **VS Code** and install:
+
+* Python extension
+* Jupyter extension
+
+Then open:
+
+```text
+notebooks/01_eda.ipynb
+```
+
+Select:
+
+```text
+Select Kernel
+      ↓
+Python Environments
+      ↓
+.venv
+```
+
+For Python 3.12, the environment may appear as:
+
+```text
+.venv (Python 3.12)
+```
+
+Run notebook cells using:
+
+```text
+Shift + Enter
+```
+
+---
+
+# 🔢 Recommended Execution Order
+
+Run the notebooks in this order:
+
+```text
+01 → 02 → 03 → 04 → 05
+```
+
+### Notebook 01 — Exploratory Data Analysis
+
+```text
+01_eda.ipynb
+```
+
+Analyze:
+
+* Dataset size
+* Columns
+* Missing values
+* Job categories
+* Resume categories
+* Text statistics
+* Data distributions
+
+---
+
+### Notebook 02 — Resume Classifier
+
+```text
+02_resume_classifier.ipynb
+```
+
+Build:
+
+```text
+TF-IDF
+   ↓
+Logistic Regression
+   ↓
+Resume Category
+```
+
+Evaluate the classifier using appropriate classification metrics.
+
+---
+
+### Notebook 03 — Job Recommender
+
+```text
+03_recommender.ipynb
+```
+
+Build:
+
+```text
+Resume
+   ↓
+TF-IDF
+   ↓
+Cosine Similarity
+   ↓
+Job Ranking
+   ↓
+Top-N Jobs
+```
+
+---
+
+### Notebook 04 — Clustering & Topics
+
+```text
+04_clustering_topics.ipynb
+```
+
+Explore:
+
+* K-Means clustering
+* Similar job groups
+* Career clusters
+* Topic discovery
+* Skill patterns
+
+This notebook also supports the skill-gap analysis.
+
+---
+
+### Notebook 05 — Fit Predictor
+
+```text
+05_fit_predictor.ipynb
+```
+
+This is an **optional supervised learning module** that can estimate how well a candidate matches a particular job.
+
+---
+
+# 💾 Saving Trained Models
+
+After training, save reusable models into:
+
+```text
+models/
+```
+
+For example:
+
+```text
+models/
+├── classifier.pkl
+├── tfidf_vectorizer.pkl
+└── recommender.pkl
+```
+
+Models should be saved using `joblib` so that the Streamlit application can load them without retraining.
+
+---
+
+# 🌐 Launch the Streamlit Application
+
+Once the models and application are ready, run:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+The application will normally open at:
+
+```text
+http://localhost:8501
+```
+
+The portal will provide the main Career Compass workflow:
+
+```text
+Upload Resume
+      ↓
+Analyze Resume
+      ↓
+Predict Career Category
+      ↓
+Find Matching Jobs
+      ↓
+Analyze Skills
+      ↓
+View Career Guidance
+```
+
+---
+
+# 📈 Model Evaluation
+
+The project can evaluate its models using appropriate metrics.
+
+### Classification
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* Confusion Matrix
+
+### Recommendation
+
+* Cosine similarity
+* Top-N relevance
+* Ranking quality
+
+### Clustering
+
+* Silhouette Score
+* Cluster distribution
+* PCA / t-SNE visualization
+
+### Optional Fit Predictor
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* ROC-AUC
+
+---
+
+# 🔮 Future Enhancements
+
+The project can be extended with additional Machine Learning capabilities.
+
+### 💡 Possible improvements
+
+* Job fit prediction
+* Salary prediction
+* Advanced skill extraction
+* Career path recommendations
+* K-Means career clustering
+* Topic modeling
+* Experience matching
+* Education matching
+* Location-based job recommendations
+* Interactive analytics dashboard
+* Personalized learning recommendations
+* Model performance dashboard
+
+---
+
+# 🔐 Data & Privacy
+
+Career Compass is designed with data handling in mind.
+
+* Raw datasets are excluded from Git.
+* Personal resume files should not be committed to the repository.
+* Trained models can be stored separately.
+* Sensitive user information should be handled responsibly.
+* `.gitignore` should be configured to prevent accidental dataset and credential uploads.
+
+**Never commit Kaggle API credentials, personal resumes, passwords, or private data to GitHub.**
+
+---
+
+# 🧪 Testing
+
+Basic feature tests are located in:
+
+```text
+tests/
+```
+
+Run tests using:
+
+```bash
+# 💻 Local Development
+
+If you prefer developing locally, make sure **Node.js and npm** are installed.
+
+You can install Node.js using **nvm**.
+
+Then clone the repository:
+
+```bash
+git clone <THIS_REPOSITORY_URL>
+cd <REPOSITORY_NAME>
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
+
+---
+
+# 🗺️ Development Roadmap
+
+```text
+✅ Project structure
+       ↓
+✅ Dataset download
+       ↓
+✅ Data preprocessing
+       ↓
+🔄 Exploratory Data Analysis
+       ↓
+🔄 Resume classification
+       ↓
+🔄 Job recommendation
+       ↓
+🔄 Skill-gap analysis
+       ↓
+🔄 Model evaluation
+       ↓
+🔄 Streamlit application
+       ↓
+🔄 Testing
+       ↓
+🚀 Final deployment
+```
+
+---
+
+# 🎯 Project Goal
+
+The main goal of **Career Compass — SmartHire** is to build an intelligent, explainable, and practical career guidance system using classical Machine Learning.
+
+Instead of simply showing job listings, the platform helps users understand:
+
+> **“Which career path fits my resume, which jobs match my profile, and what skills should I learn next?”**
+
+---
+
+# 👨‍💻 Project
+
+**Career Compass — SmartHire**
+
+**Resume-to-Job Matching & Career Guidance Engine**
+
+Built using:
+
+```text
+Python
+Pandas
+Scikit-learn
+TF-IDF
+Logistic Regression
+Cosine Similarity
+K-Means
+Streamlit
+Git & GitHub
+```
+
+---
+
+## ⭐ If You Like This Project
+
+If you find this project useful, consider giving the repository a ⭐ on GitHub and sharing your feedback.
+
+---
+
+## 📄 License
+
+This project is intended for educational, academic, and portfolio purposes.
+
+Add an appropriate open-source license such as **MIT License** if you want others to legally reuse and modify the code.
